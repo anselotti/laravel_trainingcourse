@@ -8,4 +8,8 @@
 
 @else
 <p>No listings found.</p>
+<<<<<<< HEAD
 @endunless
+=======
+@endunless
+>>>>>>> master
