@@ -2,59 +2,34 @@
 
 namespace App\Models;
 
-class Listing {
-    public static function all()
-    {
-        return [
-            [
-                'id' => 1,
-                'title' => 'Listing One',
-                'description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown 
-            printer took a galley of type and scrambled it to make a type specimen book. It has survived 
-            not only five centuries, but also the leap into electronic typesetting, remaining essentially 
-            unchanged.'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Listing Two',
-                'description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown 
-            printer took a galley of type and scrambled it to make a type specimen book. It has survived 
-            not only five centuries, but also the leap into electronic typesetting, remaining essentially 
-            unchanged.'
-            ]
-            ];
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Listing extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['title', 'logo', 'company', 'email', 'location', 'website', 'tags', 'description', 'user_id'];
+
+    public function scopeFilter($query, array $filters) {
+
+        if($filters['tag'] ?? false) {
+
+            $query->where('tags', 'like', '%' . request('tag') . '%');
+        } 
+
+        if($filters['search'] ?? false) {
+
+            $query->where('title', 'like', '%' . request('search') . '%')
+            ->orWhere('description', 'like', '%' . request('search') . '%')
+            ->orWhere('tags', 'like', '%' . request('search') . '%')
+            ->orWhere('company', 'like', '%' . request('search') . '%')
+            ->orWhere('location', 'like', '%' . request('search') . '%');
+        } 
     }
 
-    public static function find($id) {
-        $listings = self::all();
-
-        foreach($listings as $listing) {
-            if($listing['id'] = $id) {
-                return $listing;
-            }
-        }
+    // relationship to user
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
-
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TÄMÄ ON TESTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-?>
-
